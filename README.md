@@ -1,8 +1,9 @@
 # Personal Portfolio
 
-Phase 1 foundation for an AI and technology-inspired professional portfolio.
-This phase contains a minimal placeholder, without personal information, projects,
-animations, or the final visual design.
+React + TypeScript portfolio foundation with the Phase 2 AI-inspired design
+system and navigation. Personal information, project showcases, and final content
+are intentionally deferred. No external fonts, icon libraries, or animation
+dependencies are needed.
 
 ## Requirements and setup
 
@@ -23,7 +24,7 @@ No environment variables or credentials are needed.
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Start the development server with hot updates. |
-| `npm test` | Run all Vitest smoke tests once. |
+| `npm test` | Run all Vitest rendering, theme, and navigation tests once. |
 | `npm run test:watch` | Re-run tests while editing. |
 | `npm run lint` | Run ESLint; warnings also fail the check. |
 | `npm run build` | Type-check the app and tooling, then build into `dist/`. |
@@ -36,14 +37,22 @@ dependency versions. The production output and installed dependencies are ignore
 
 ```text
 src/
-  App.tsx            Portfolio placeholder and its semantic page structure
-  App.test.tsx       User-visible rendering smoke tests
+  App.tsx            Six section placeholders and semantic page structure
+  App.test.tsx       Rendering, anchor navigation, and mobile disclosure tests
+  theme.test.tsx     Persistence, system preference, and pre-paint script tests
   main.tsx           React browser entry point
+  components/
+    Button.tsx       Native Button and anchor ButtonLink with shared styles
+    Container.tsx    Consistent responsive content width
+    Header.tsx       Desktop navigation, mobile disclosure, and theme selector
+    SectionHeading.tsx  Reusable numbered section headings
+  hooks/
+    useTheme.ts      Theme selection, storage fallback, system change listener
   styles/
-    index.css        Tailwind import, shared colors, and global defaults
+    index.css        Tailwind, theme tokens, responsive layout, and CSS effects
   test/
     setup.ts         DOM matchers and cleanup between tests
-index.html           HTML shell and page metadata
+index.html           HTML shell, metadata, and synchronous pre-paint theme script
 vite.config.ts       React, Tailwind, and Vitest integration
 eslint.config.js     JavaScript, TypeScript, and React lint rules
 tsconfig*.json       Strict app and build-tool TypeScript settings
@@ -52,29 +61,78 @@ tsconfig*.json       Strict app and build-tool TypeScript settings
 Keep tests beside the code they exercise. Add component or feature folders when
 there is code to put in them; no router, state library, or UI kit is needed yet.
 
-## Styling and future themes
+## Design system and themes
 
 Tailwind CSS uses the official `@tailwindcss/vite` plugin and a CSS import; no
 separate PostCSS or Tailwind JavaScript configuration is needed. Semantic CSS
-variables define the background, foreground, muted text, and accent colors in
-one place. Tailwind utilities reference those variables rather than repeating
-colors in components. The placeholder starts with a dark palette. A future light
-palette can override the same variables; theme controls and persistence are
-intentionally deferred.
+variables define navy surfaces, readable foreground/muted text, cyan actions,
+violet accents, borders, and decorative grid/glow colors. Tailwind's semantic
+color utilities map to the same variables. Reuse these tokens and the existing
+Button, ButtonLink, Container, and SectionHeading components before adding new
+variants. Buttons retain native behavior; navigation uses real anchors.
+
+The native **Color theme** selector offers System, Light, and Dark. System is the
+default and follows live OS preference changes. An explicit choice is saved as
+`portfolio-theme` in localStorage. Selecting System removes the saved override.
+Invalid values fall back to System. If storage is blocked, theme changes still
+work for the current visit, but cannot survive reloads.
+
+A small synchronous script in the HTML head sets `data-theme` before the page is
+painted, so the correct palette does not wait for React. Keep that script aligned
+with `useTheme.ts`; tests exercise both paths. A deployment with a restrictive CSP
+will need a hash/nonce for this inline script (no CSP is configured locally).
+Theme changes are local to the tab; cross-tab synchronization is deferred.
+
+Typography uses system sans-serif and monospace stacks. Spacing and type scale
+with the viewport. CSS gradients and static orbital decoration provide the
+technology-inspired background without images, canvas, or ongoing animations.
+Reduced-motion preference disables smooth scrolling and transitions.
+
+## Navigation and accessibility
+
+Home, About, Skills, Projects, Experience, and Contact have stable fragment IDs.
+The sticky header uses desktop links at 64rem and above; smaller viewports use a
+native button with `aria-expanded` and `aria-controls` to disclose mobile links.
+It is a navigation disclosure, not a dialog or ARIA application menu: Tab follows
+normal document order without a focus trap. Escape returns focus to Menu; outside
+pointer interaction, leaving the header with keyboard focus, section selection,
+and switching to desktop close it. Focus moves from mobile controls to the matching
+desktop link when resizing. Header section links focus their destination.
+Anchor offsets keep content clear of the sticky header. A skip link, labeled
+landmarks, visible focus rings, and 44px minimum control targets support keyboard
+and touch use. Decorative geometry is hidden from assistive technologies.
 
 ## Manual checks
 
-1. Run `npm run dev` and open the printed URL. Confirm the portfolio heading and
-   under-development message appear without starter logos or a counter.
-2. Check a narrow mobile viewport and a desktop viewport. Text should remain
-   readable, with no horizontal scrolling. Try 200% browser zoom.
-3. Check the browser console for errors. Edit the placeholder text and confirm
-   Vite updates it without restarting the server, then restore the text.
-4. Run `npm test`, `npm run lint`, and `npm run build`.
-5. Run `npm run preview` and check the same page using its printed URL.
+1. Run `npm run dev`. Check desktop (1024/1440px), tablet (768px), and mobile
+   (320/375px) widths in both themes. Check readability, wrapping, no horizontal
+   overflow, and 200% zoom. The header should switch navigation at 64rem.
+2. With no saved theme, choose System and change the OS color preference. The
+   page should follow. Choose the opposite explicit theme and reload: it should
+   persist without briefly showing the system palette. Repeat with network/CPU
+   throttling. Switch back to System and confirm the saved override is removed.
+3. Tab from the address bar: Skip to content should appear first. Use only the
+   keyboard for theme selection and all navigation; focus should remain visible.
+4. At mobile width, open Menu with Enter/Space and Tab through all six links.
+   Escape should close it and restore focus to Menu. Reopen and select a section:
+   the menu should close, the URL hash should update, and the section should be
+   visible and focused below the header. Check outside click and Tab dismissal.
+5. Open the mobile menu, resize to desktop, then back to mobile: it should be
+   closed. Verify desktop links, hero buttons, Back to top, browser back/forward,
+   and direct URLs such as `/#projects`.
+6. Enable reduced motion: anchor jumps should be immediate and control
+   transitions disabled. Check a screen reader announces the selector, menu
+   expansion state, navigation landmarks, and section headings.
+7. With localStorage blocked, change themes and navigate: no crash should occur.
+   Persistence is unavailable in this case. Check the browser console for errors.
+8. Run `npm test`, `npm run lint`, `npm run build`, then `npm run preview` and
+   repeat the theme reload and navigation checks against the production build.
 
-Vitest runs the actual component in jsdom and verifies the main landmark, heading,
-and development message. It does not replace visual checks in a real browser.
+Vitest exercises the real components in jsdom, including bootstrap script
+execution, theme reload behavior, invalid/blocked storage, system changes,
+anchor targets, and menu focus/dismissal. CSS breakpoints, visual contrast,
+scroll positioning, initial paint, and real keyboard/screen-reader behavior still
+need browser acceptance testing; jsdom does not perform layout or paint.
 
 ## Known tooling advisory
 
