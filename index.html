@@ -3,6 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script id="theme-init">
+      // Apply before paint; keep preference handling aligned with useTheme.
+      (() => {
+        let saved
+        try { saved = localStorage.getItem('portfolio-theme') } catch { /* Use system preference. */ }
+        const theme = saved === 'light' || saved === 'dark'
+          ? saved
+          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        document.documentElement.dataset.theme = theme
+      })()
+    </script>
     <meta name="description" content="A professional portfolio exploring AI and technology. Currently under development." />
     <title>Personal Portfolio</title>
   </head>
