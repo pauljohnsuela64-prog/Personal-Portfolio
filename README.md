@@ -2,8 +2,8 @@
 
 React + TypeScript portfolio with an AI-inspired design system, responsive
 navigation, personal Hero/About Me content, and Phase 4 technical skills and a
-filterable eight-project showcase, and a Phase 5 internship timeline with education.
-Contact remains a placeholder for Phase 6.
+filterable eight-project showcase, an internship timeline with education, and
+Phase 6 contact/footer polish with active navigation and progressive scroll reveals.
 Technologies are presented as exposure through AI-assisted project development,
 not independent proficiency. No new runtime dependencies are needed.
 
@@ -39,7 +39,7 @@ dependency versions. The production output and installed dependencies are ignore
 
 ```text
 src/
-  App.tsx            Hero/About, Skills/Projects, Experience/Education, Contact placeholder
+  App.tsx            Complete single-page portfolio section composition
   App.test.tsx       Rendering, anchor navigation, and mobile disclosure tests
   theme.test.tsx     Persistence, system preference, and pre-paint script tests
   main.tsx           React browser entry point
@@ -56,13 +56,18 @@ src/
     Experience.test.tsx  Factual duties/dates, ongoing education, resume availability
     Resume.tsx       Resume summary and optional approved PDF download
     Resume.test.tsx  Download omission and local link semantics
+    Contact.tsx      Entry-level career interest and approved GitHub channel
+    Footer.tsx       Personal branding, section navigation, AI acknowledgment
   content/
     profile.ts       Personal copy, photo path, GitHub URL, and metadata source
     projects.ts      Typed project details, categories, optional links/images
     skills.ts        Typed skill groups and learning interests
     career.ts        Typed internships, education, and approved-resume setting
+    navigation.ts    Shared Header/Footer section names and fragment targets
   hooks/
     useTheme.ts      Theme selection, storage fallback, system change listener
+    useActiveSection.ts  Frame-throttled visible-section navigation state
+    useScrollReveal.ts   Optional one-time section animation enhancement
   styles/
     index.css        Tailwind, theme tokens, responsive layout, and CSS effects
   test/
@@ -118,7 +123,7 @@ Replace that file to change the portrait. The browser switches to accessible PJS
 initials if the image is absent or fails to load. Width/height and CSS aspect ratio
 reserve space so this fallback does not shift the layout. The original supplied
 image is preserved. View Projects and Contact Me lead to their existing section
-section and Contact placeholder respectively; GitHub opens the supplied public profile in the current tab. No
+and Contact sections respectively; GitHub opens the supplied public profile in the current tab. No
 contact details, additional social profiles, or internship responsibilities have
 been inferred.
 
@@ -192,8 +197,8 @@ and production preview before publishing it. No replacement PDF was generated.
    Hero/card download link. Confirm the private PDF is ignored, absent from public
    assets and `dist`, and blocked by the dev server. Do not publish the local copy.
 6. Recheck the unchanged professional title, project filtering, private project
-   protections, theme persistence, and reduced-motion behavior. Contact should be
-   the only remaining placeholder.
+   protections, theme persistence, and reduced-motion behavior. The later Phase 6
+   Contact section uses only the approved GitHub profile.
 7. Run tests, lint, and build, then repeat layout/navigation/privacy checks using
    `npm run preview`. Automated DOM tests do not replace visual/screen-reader QA.
 
@@ -252,6 +257,69 @@ is claimed to be a production deployment or independently implemented without AI
    Recheck navigation, theme persistence, skip link, and reduced-motion behavior.
 7. Run `npm test`, `npm run lint`, `npm run build`, then `npm run preview`. Inspect
    the new metadata and repeat keyboard, image, privacy, and layout checks.
+
+## Contact and visual polish
+
+Contact expresses interest in entry-level software development opportunities and
+links only to the verified public GitHub profile. No email, phone number, location,
+additional social profile, contact form, or backend has been added. Edit the
+approved contact message and AI-assisted development acknowledgment in
+`src/content/profile.ts`. The footer reuses shared section destinations, personal
+branding, the existing professional title, and a Back to top link.
+
+Header links use `aria-current="location"` for the visible section in both desktop
+and mobile navigation. An underline and stronger text provide a cue beyond color.
+Active state updates on scroll, resize, and hash navigation, with geometry work
+limited to six sections and at most one update per animation frame. The sticky
+header height and computed anchor padding are included in the detection offset;
+anchor spacing is applied once through root scroll padding. The bottom of the page selects
+Contact. Native anchors still work independently of the highlighting.
+
+Scroll reveals are progressive enhancement. Sections start fully visible; a
+successful IntersectionObserver callback adds a short, one-time CSS animation
+from 88% to full opacity with an 8px movement. There is no hidden waiting class,
+no scroll-jacking, and no reveal replay when project filters change. If the API
+is absent or initialization throws, content stays visible. Observers disconnect
+on cleanup and stop observing each revealed section. Reduced-motion users skip
+initialization, and CSS suppresses animations/transitions if the setting changes
+later. Focus within a section suppresses its reveal animation.
+
+Portrait framing, fluid spacing, project-card padding, contact layout, and footer
+wrapping reuse the existing palettes. Fine-pointer hover effects are small and
+limited to no-preference motion settings; card focus remains explicitly visible.
+No animation package, external font, new asset, or runtime dependency was added.
+The private resume remains ignored/untracked and blocked by Vite, is excluded
+from production, and download controls remain disabled.
+
+### Phase 6 acceptance checks
+
+1. Confirm Contact expresses the intended entry-level interest and exposes only
+   the approved GitHub profile. There should be no contact form or invented details.
+2. Confirm footer name/title, AI-assisted acknowledgment, all six section links,
+   and Back to top. Check keyboard focus and native fragment navigation.
+3. Scroll through all sections in both directions, use direct hashes, resize,
+   and reach the page bottom. Check one desktop/mobile link has the current-location
+   state, a visible underline, and no focus jump. Footer links should reach the
+   same targets without resetting project filters or theme preference.
+4. Check 320/375px, 768px, and desktop widths, plus 200% zoom in both themes.
+   Inspect portrait cropping, card images/tags, filters, contact/footer wrapping,
+   readable contrast, and absence of horizontal overflow.
+5. Check subtle hover/reveal behavior, then enable reduced motion. Content should
+   stay readable and still. With IntersectionObserver disabled or throwing before
+   page initialization, all sections must remain visible and usable.
+6. Recheck mobile menu Escape/dismissal/resize focus, project filters and counts,
+   photo/screenshot fallbacks, and theme persistence. No obsolete placeholder
+   message should remain; unavailable screenshots/resume retain honest fallbacks.
+7. Run tests, lint, build, and `npm run preview`. Recheck private PDF exclusion,
+   disabled downloads, and development HTTP denial of private paths. Repeat visual,
+   keyboard, screen-reader, and reduced-motion checks on the production preview.
+
+Automated regressions cover approved-only contact, footer destinations, current
+navigation state, reveal fallback/cleanup, and existing portfolio behavior.
+jsdom does not verify rendered spacing/crop, actual scrolling, CSS animation, or
+screen-reader announcements. Native scroll detection uses section geometry; very
+short viewports can change the highlighted section near boundaries without moving
+keyboard focus.
 
 ## Navigation and accessibility
 

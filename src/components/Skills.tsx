@@ -3,7 +3,7 @@ import { SectionHeading } from './SectionHeading'
 
 export function Skills() {
   return (
-    <section id="skills" className="portfolio-section" aria-labelledby="skills-heading" tabIndex={-1}>
+    <section id="skills" className="portfolio-section" data-reveal aria-labelledby="skills-heading" tabIndex={-1}>
       <SectionHeading id="skills-heading" number="03">Technical Skills</SectionHeading>
       <p className="section-intro">Project-based exposure through AI-assisted development, not proficiency ratings.
         These technologies reflect the projects I am learning from.</p>

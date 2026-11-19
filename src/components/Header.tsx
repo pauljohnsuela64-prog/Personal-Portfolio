@@ -2,14 +2,15 @@ import { useEffect, useRef, useState } from 'react'
 import { useTheme } from '../hooks/useTheme'
 import { Button } from './Button'
 import { Container } from './Container'
-
-const sectionNames = ['Home', 'About', 'Skills', 'Projects', 'Experience', 'Contact'] as const
+import { sectionNames } from '../content/navigation'
+import { useActiveSection } from '../hooks/useActiveSection'
 
 export function Header() {
   const [open, setOpen] = useState(false)
   const header = useRef<HTMLElement>(null)
   const toggle = useRef<HTMLButtonElement>(null)
   const { preference, changeTheme } = useTheme()
+  const activeId = useActiveSection()
 
   useEffect(() => {
     const desktop = window.matchMedia('(min-width: 64rem)')
@@ -52,7 +53,8 @@ export function Header() {
 
   const links = sectionNames.map((name) => (
     <li key={name}>
-      <a href={`#${name.toLowerCase()}`} onClick={() => navigate(name.toLowerCase())}>{name}</a>
+      <a href={`#${name.toLowerCase()}`} aria-current={activeId === name.toLowerCase() ? 'location' : undefined}
+        onClick={() => navigate(name.toLowerCase())}>{name}</a>
     </li>
   ))
 
