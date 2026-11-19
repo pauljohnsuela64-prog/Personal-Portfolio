@@ -6,11 +6,8 @@ import { ProfilePortrait } from './components/ProfilePortrait'
 import { profile } from './content/profile'
 import { Skills } from './components/Skills'
 import { Projects } from './components/Projects'
-
-const sections = [
-  { id: 'experience', title: 'Experience', description: 'Professional milestones and lessons from practice.' },
-  { id: 'contact', title: 'Contact', description: 'A space for future conversations and connections.' },
-]
+import { Experience } from './components/Experience'
+import { ResumeDownload } from './components/Resume'
 
 export default function App() {
   return (
@@ -31,6 +28,7 @@ export default function App() {
                   <ButtonLink href="#projects">View Projects <span aria-hidden="true">↗</span></ButtonLink>
                   <ButtonLink href="#contact" variant="secondary">Contact Me</ButtonLink>
                   <ButtonLink href={profile.github} variant="secondary">GitHub <span aria-hidden="true">↗</span></ButtonLink>
+                  <ResumeDownload />
                 </div>
               </div>
               <ProfilePortrait />
@@ -56,16 +54,14 @@ export default function App() {
           </section>
           <Skills />
           <Projects />
-          {sections.map((section, index) => (
-            <section key={section.id} id={section.id} className="portfolio-section"
-              aria-labelledby={`${section.id}-heading`} tabIndex={-1}>
-              <SectionHeading id={`${section.id}-heading`} number={`0${index + 5}`}>{section.title}</SectionHeading>
-              <div className="section-placeholder">
-                <p>{section.description}</p>
-                <span className="placeholder-label">Content coming soon</span>
-              </div>
-            </section>
-          ))}
+          <Experience />
+          <section id="contact" className="portfolio-section" aria-labelledby="contact-heading" tabIndex={-1}>
+            <SectionHeading id="contact-heading" number="06">Contact</SectionHeading>
+            <div className="section-placeholder">
+              <p>A space for future conversations and connections.</p>
+              <span className="placeholder-label">Content coming soon</span>
+            </div>
+          </section>
         </Container>
       </main>
       <footer className="site-footer"><Container><p>Personal Portfolio <span> / AI &amp; Technology</span></p>

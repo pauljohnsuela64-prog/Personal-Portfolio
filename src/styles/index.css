@@ -142,7 +142,31 @@ h1 { margin: 0; font-size: clamp(2.5rem, 5vw, 4.25rem); font-weight: 650; letter
 .project-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; margin-top: auto; padding-top: .5rem; }
 .private-label { color: var(--muted); font-size: .8rem; border: 1px dashed var(--border); padding: .75rem; border-radius: .3rem; }
 
+.career-layout { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 2rem; }
+.career-subheading { margin: 0 0 1.5rem; font-size: 1.1rem; font-weight: 600; }
+.experience-timeline { list-style: none; margin: 0 0 0 .4rem; padding: 0; border-left: 1px solid var(--border); }
+.timeline-entry { position: relative; padding: 0 0 1.5rem 1.5rem; }
+.timeline-entry:last-child { padding-bottom: 0; }
+.timeline-entry::before { content: ""; position: absolute; left: -.35rem; top: 1.5rem; width: .65rem; height: .65rem; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--background); }
+.timeline-card, .education-card, .resume-card { min-width: 0; padding: clamp(1.25rem, 3vw, 2rem); background: var(--surface); border: 1px solid var(--border); border-radius: .65rem; }
+.timeline-card h4 { margin: .75rem 0; font-size: 1.1rem; font-weight: 600; line-height: 1.5; }
+.timeline-timing { margin: 0; color: var(--violet); font: .8rem ui-monospace, monospace; line-height: 1.8; }
+.timeline-role { margin: 0; color: var(--foreground); font-size: .9rem; line-height: 1.8; }
+.timeline-role > span { color: var(--muted); }
+.timeline-card ul { margin: 1rem 0 0; padding-left: 1.15rem; color: var(--muted); line-height: 1.85; }
+.timeline-card li + li { margin-top: .5rem; }
+.timeline-card li::marker { color: var(--accent); }
+.career-sidebar { display: grid; min-width: 0; gap: 1.5rem; }
+.education-card h3, .resume-card h3 { margin: 0 0 1rem; font-size: 1.1rem; font-weight: 600; }
+.education-card p, .resume-card p { margin: 0 0 1rem; color: var(--muted); line-height: 1.85; }
+.education-card > .education-degree { color: var(--foreground); font-weight: 500; }
+.education-card > .education-status { color: var(--accent); }
+.education-card p:last-child, .resume-card p:last-child { margin-bottom: 0; }
+.resume-card .button { margin-top: .25rem; }
+.resume-availability { font-size: .85rem; }
+
 @media (min-width: 48rem) {
+  .career-layout { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
   .skills-grid, .projects-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-layout { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
   .about-layout { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
