@@ -1,9 +1,9 @@
 # Personal Portfolio
 
-React + TypeScript portfolio foundation with the Phase 2 AI-inspired design
-system and navigation. Personal information, project showcases, and final content
-are intentionally deferred. No external fonts, icon libraries, or animation
-dependencies are needed.
+React + TypeScript portfolio with an AI-inspired design system, responsive
+navigation, and Phase 3 personal Hero/About Me content. Skills, Projects,
+Experience, and Contact remain placeholders. No external fonts, icon libraries,
+or animation dependencies are needed.
 
 ## Requirements and setup
 
@@ -37,7 +37,7 @@ dependency versions. The production output and installed dependencies are ignore
 
 ```text
 src/
-  App.tsx            Six section placeholders and semantic page structure
+  App.tsx            Personal Hero/About Me and four future section placeholders
   App.test.tsx       Rendering, anchor navigation, and mobile disclosure tests
   theme.test.tsx     Persistence, system preference, and pre-paint script tests
   main.tsx           React browser entry point
@@ -46,6 +46,9 @@ src/
     Container.tsx    Consistent responsive content width
     Header.tsx       Desktop navigation, mobile disclosure, and theme selector
     SectionHeading.tsx  Reusable numbered section headings
+    ProfilePortrait.tsx  Profile photo with accessible initials fallback
+  content/
+    profile.ts       Personal copy, photo path, GitHub URL, and metadata source
   hooks/
     useTheme.ts      Theme selection, storage fallback, system change listener
   styles/
@@ -53,7 +56,7 @@ src/
   test/
     setup.ts         DOM matchers and cleanup between tests
 index.html           HTML shell, metadata, and synchronous pre-paint theme script
-vite.config.ts       React, Tailwind, and Vitest integration
+vite.config.ts       React, Tailwind, Vitest, and HTML metadata from profile.ts
 eslint.config.js     JavaScript, TypeScript, and React lint rules
 tsconfig*.json       Strict app and build-tool TypeScript settings
 ```
@@ -84,9 +87,46 @@ will need a hash/nonce for this inline script (no CSP is configured locally).
 Theme changes are local to the tab; cross-tab synchronization is deferred.
 
 Typography uses system sans-serif and monospace stacks. Spacing and type scale
-with the viewport. CSS gradients and static orbital decoration provide the
-technology-inspired background without images, canvas, or ongoing animations.
-Reduced-motion preference disables smooth scrolling and transitions.
+with the viewport. CSS gradients and a portrait orbital accent provide the
+technology-inspired background. The hero has a 650ms entrance and the orbital
+accent settles in four seconds; neither loops. The photo stays still. Animation
+is enabled only when reduced motion is not requested. Reduced-motion preference
+also disables smooth scrolling and transitions; all content stays visible.
+
+## Editing personal content
+
+Edit `src/content/profile.ts` for the name, title, introduction, education,
+internship organizations, career interests, GitHub link, initials, and description.
+The Vite HTML hook generates the page title and description from this same source
+in both development and production; restart Vite after changing metadata.
+The expected graduation is recorded as March 2027, not a completed qualification.
+
+The supplied photo is `public/images/profile.jpg`, served using Vite's base URL.
+Replace that file to change the portrait. The browser switches to accessible PJS
+initials if the image is absent or fails to load. Width/height and CSS aspect ratio
+reserve space so this fallback does not shift the layout. The original supplied
+image is preserved. View Projects and Contact Me lead to their existing section
+placeholders; GitHub opens the supplied public profile in the current tab. No
+contact details, additional social profiles, or internship responsibilities have
+been inferred.
+
+### Phase 3 acceptance checks
+
+1. Check the Hero/About copy against the supplied facts, including fourth-year
+   BSIT status, Cainta Campus, March 2027 expected graduation, and both internships.
+2. Check the portrait crop and text wrapping at 320/375px, 768px, and desktop
+   widths in both themes, including 200% zoom. Confirm no horizontal overflow.
+3. Use the keyboard to activate View Projects, Contact Me, and GitHub. Confirm
+   both anchors reach their existing placeholders and GitHub reaches the supplied
+   profile. Recheck navigation, focus rings, and persisted theme selection.
+4. Block the image request or temporarily rename the photo, then reload. Confirm
+   PJS initials appear without a broken image or layout shift; restore the photo.
+5. Reload with normal motion: only the hero entrance and portrait orbit animate,
+   and both stop within four seconds. With reduced motion enabled, content and
+   the portrait should appear immediately and remain still.
+6. Run tests, lint, and build, then use `npm run preview`. Confirm the browser tab
+   title includes Paul John A. Suela and inspect the personalized meta description.
+   Repeat mobile, keyboard, reduced-motion, and image fallback checks in preview.
 
 ## Navigation and accessibility
 
@@ -130,7 +170,8 @@ and touch use. Decorative geometry is hidden from assistive technologies.
 
 Vitest exercises the real components in jsdom, including bootstrap script
 execution, theme reload behavior, invalid/blocked storage, system changes,
-anchor targets, and menu focus/dismissal. CSS breakpoints, visual contrast,
+anchor targets, menu focus/dismissal, supplied personal content, hero links, and
+photo-error fallback. CSS breakpoints, visual contrast,
 scroll positioning, initial paint, and real keyboard/screen-reader behavior still
 need browser acceptance testing; jsdom does not perform layout or paint.
 

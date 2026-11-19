@@ -19,15 +19,40 @@ describe('portfolio navigation', () => {
     expect(
       within(screen.getByRole('main')).getByRole('heading', {
         level: 1,
-        name: 'Personal Portfolio',
+        name: 'Paul John A. Suela',
       }),
     ).toBeInTheDocument()
   })
 
-  it('explains that the portfolio is under development', () => {
+  it('introduces the supplied professional interests and working hero links', () => {
     render(<App />)
+    const home = screen.getByRole('region', { name: 'Paul John A. Suela' })
+    expect(within(home).getByText('IT Support | Aspiring Developer | AI Enthusiast')).toBeVisible()
+    expect(within(home).getByRole('link', { name: 'View Projects' })).toHaveAttribute('href', '#projects')
+    expect(within(home).getByRole('link', { name: 'Contact Me' })).toHaveAttribute('href', '#contact')
+    expect(within(home).getByRole('link', { name: 'GitHub' })).toHaveAttribute('href', 'https://github.com/pauljohnsuela64-prog')
+  })
 
-    expect(screen.getByText(/under development/i)).toBeVisible()
+  it('shows accurate education, internship background, and career interests in About Me', () => {
+    render(<App />)
+    const about = screen.getByRole('region', { name: 'About Me' })
+    expect(within(about).getByText(/fourth-year/)).toHaveTextContent('ICCT Colleges Foundation Inc., Cainta Campus')
+    expect(within(about).getByText(/fourth-year/)).toHaveTextContent('March 2027')
+    expect(within(about).getByText('Antipolo City Government – PESO')).toBeVisible()
+    expect(within(about).getByText('Basic Hauling & Logistic Inc. – IT Department')).toBeVisible()
+    for (const interest of ['IT support', 'Software development', 'AI', 'Automation', 'Cloud computing']) {
+      expect(within(about).getByText(interest, { exact: true })).toBeVisible()
+    }
+    expect(screen.getAllByText('Content coming soon')).toHaveLength(4)
+  })
+
+  it('uses the supplied profile photo with an accessible initials fallback on error', () => {
+    render(<App />)
+    const portrait = screen.getByRole('img', { name: 'Portrait of Paul John A. Suela' })
+    expect(portrait).toHaveAttribute('src', '/images/profile.jpg')
+    fireEvent.error(portrait)
+    expect(screen.getByRole('img', { name: 'Paul John A. Suela — initials' })).toHaveTextContent('PJS')
+    expect(screen.queryByRole('img', { name: 'Portrait of Paul John A. Suela' })).not.toBeInTheDocument()
   })
 
   it('links all six desktop navigation items to labeled sections', () => {
