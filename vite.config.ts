@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), {
     name: 'portfolio-metadata',
     transformIndexHtml: () => [
-      { tag: 'title', children: `${profile.name} | IT Portfolio`, injectTo: 'head' },
+      { tag: 'title', children: `${profile.name} | ${profile.title}`, injectTo: 'head' },
       { tag: 'meta', attrs: { name: 'description', content: profile.description }, injectTo: 'head' },
     ],
   }],

@@ -4,10 +4,10 @@ import { Header } from './components/Header'
 import { SectionHeading } from './components/SectionHeading'
 import { ProfilePortrait } from './components/ProfilePortrait'
 import { profile } from './content/profile'
+import { Skills } from './components/Skills'
+import { Projects } from './components/Projects'
 
 const sections = [
-  { id: 'skills', title: 'Skills', description: 'Tools, technologies, and areas of technical focus.' },
-  { id: 'projects', title: 'Projects', description: 'Selected work and the thinking behind each solution.' },
   { id: 'experience', title: 'Experience', description: 'Professional milestones and lessons from practice.' },
   { id: 'contact', title: 'Contact', description: 'A space for future conversations and connections.' },
 ]
@@ -54,10 +54,12 @@ export default function App() {
               </div>
             </div>
           </section>
+          <Skills />
+          <Projects />
           {sections.map((section, index) => (
             <section key={section.id} id={section.id} className="portfolio-section"
               aria-labelledby={`${section.id}-heading`} tabIndex={-1}>
-              <SectionHeading id={`${section.id}-heading`} number={`0${index + 3}`}>{section.title}</SectionHeading>
+              <SectionHeading id={`${section.id}-heading`} number={`0${index + 5}`}>{section.title}</SectionHeading>
               <div className="section-placeholder">
                 <p>{section.description}</p>
                 <span className="placeholder-label">Content coming soon</span>
