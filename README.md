@@ -2,7 +2,8 @@
 
 React + TypeScript portfolio with an AI-inspired design system, responsive
 navigation, personal Hero/About Me content, and Phase 4 technical skills and a
-filterable eight-project showcase. Experience and Contact remain placeholders.
+filterable eight-project showcase, and a Phase 5 internship timeline with education.
+Contact remains a placeholder for Phase 6.
 Technologies are presented as exposure through AI-assisted project development,
 not independent proficiency. No new runtime dependencies are needed.
 
@@ -38,7 +39,7 @@ dependency versions. The production output and installed dependencies are ignore
 
 ```text
 src/
-  App.tsx            Hero/About, Skills/Projects, Experience/Contact placeholders
+  App.tsx            Hero/About, Skills/Projects, Experience/Education, Contact placeholder
   App.test.tsx       Rendering, anchor navigation, and mobile disclosure tests
   theme.test.tsx     Persistence, system preference, and pre-paint script tests
   main.tsx           React browser entry point
@@ -51,10 +52,15 @@ src/
     Projects.tsx     Category filtering, project cards, screenshot fallbacks
     Projects.test.tsx  Showcase counts, filtering, privacy, and skills tests
     Skills.tsx       Six groups of accurately qualified technology exposure
+    Experience.tsx   Accessible internship timeline and education card
+    Experience.test.tsx  Factual duties/dates, ongoing education, resume availability
+    Resume.tsx       Resume summary and optional approved PDF download
+    Resume.test.tsx  Download omission and local link semantics
   content/
     profile.ts       Personal copy, photo path, GitHub URL, and metadata source
     projects.ts      Typed project details, categories, optional links/images
     skills.ts        Typed skill groups and learning interests
+    career.ts        Typed internships, education, and approved-resume setting
   hooks/
     useTheme.ts      Theme selection, storage fallback, system change listener
   styles/
@@ -133,6 +139,63 @@ been inferred.
 6. Run tests, lint, and build, then use `npm run preview`. Confirm the browser tab
    title includes Paul John A. Suela and inspect the personalized meta description.
    Repeat mobile, keyboard, reduced-motion, and image fallback checks in preview.
+
+## Experience, education, and resume
+
+Edit `src/content/career.ts` for internship organizations, roles, timing, duties,
+education, and public-resume approval. About Me derives its internship list and
+education summary from that source. BHLI is listed as IT Intern, completed October
+2026, with CCTV replacement assistance on company trucks and assigned departmental
+tasks. PESO is labeled the first internship with data encoding and administrative
+tasks; no dates were supplied, so none are invented. Education remains fourth-year
+BSIT at ICCT Colleges Foundation Inc., Cainta Campus, with expected graduation in
+March 2027. It is not presented as a completed qualification or an IT Support
+proficiency claim.
+
+The responsive timeline is an ordered list; dates use semantic `time` elements,
+and decoration is CSS-only. Education and Resume have labeled sections. Existing
+anchor IDs, section numbering, theme tokens, keyboard behavior, and reduced-motion
+support are preserved. No new dependencies or animations are required.
+
+### Resume privacy and availability
+
+The supplied PDF was reviewed with local text extraction. It contained contact
+information not approved for public disclosure in this request, so it was not
+approved for inclusion. The exact values are not recorded here. The original was
+preserved byte-for-byte at `.private/resume.pdf`, outside `public` and ignored by
+Git. Vite's development server denies `.private` paths, and production builds do
+not copy this directory. Do not move unreviewed personal files into `public`:
+those files would be downloadable even without a visible link.
+
+`publicResume` is currently `null`. The Resume card reports that a downloadable
+resume is unavailable, and neither the Hero nor the card renders a download link.
+To enable it later, first obtain approval for a sanitized PDF, review its visible
+text, annotations, embedded metadata, and intended contact information, then place
+it at `public/documents/resume.pdf`. Set `publicResume` to
+`{ path: 'documents/resume.pdf', downloadName: 'Paul-John-Suela-Resume.pdf' }`.
+The shared ResumeDownload component then renders both links with native download
+semantics and a Vite base-aware URL. File existence and approval are manual gates;
+the app does not infer permission from a filename. Verify the PDF in development
+and production preview before publishing it. No replacement PDF was generated.
+
+### Phase 5 acceptance checks
+
+1. Confirm PR #4 is merged and Phase 5 starts from current main. Confirm both
+   internships, BHLI's October 2026 completion, and only the supplied duties.
+2. Verify PESO is identified as the first internship without invented dates.
+   Confirm ongoing fourth-year BSIT status and March 2027 expected graduation.
+3. Check the timeline and education/resume cards at 320/375px, tablet, desktop,
+   and 200% zoom in both themes. Text should wrap without horizontal overflow.
+4. Use desktop/mobile Experience navigation and keyboard controls. Check focus,
+   anchor offsets, heading hierarchy, and screen-reader reading order.
+5. Confirm the Resume card has an honest unavailable message and there is no
+   Hero/card download link. Confirm the private PDF is ignored, absent from public
+   assets and `dist`, and blocked by the dev server. Do not publish the local copy.
+6. Recheck the unchanged professional title, project filtering, private project
+   protections, theme persistence, and reduced-motion behavior. Contact should be
+   the only remaining placeholder.
+7. Run tests, lint, and build, then repeat layout/navigation/privacy checks using
+   `npm run preview`. Automated DOM tests do not replace visual/screen-reader QA.
 
 ## Skills and project showcase
 

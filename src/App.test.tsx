@@ -43,7 +43,7 @@ describe('portfolio navigation', () => {
     for (const interest of ['Software development', 'AI', 'AI automation', 'Cloud computing']) {
       expect(within(about).getByText(interest, { exact: true })).toBeVisible()
     }
-    expect(screen.getAllByText('Content coming soon')).toHaveLength(2)
+    expect(screen.getAllByText('Content coming soon')).toHaveLength(1)
   })
 
   it('uses the supplied profile photo with an accessible initials fallback on error', () => {
