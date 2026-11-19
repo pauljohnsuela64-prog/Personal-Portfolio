@@ -27,7 +27,7 @@ describe('portfolio navigation', () => {
   it('introduces the supplied professional interests and working hero links', () => {
     render(<App />)
     const home = screen.getByRole('region', { name: 'Paul John A. Suela' })
-    expect(within(home).getByText('IT Support | Aspiring Developer | AI Enthusiast')).toBeVisible()
+    expect(within(home).getByText('Aspiring Software Developer | AI & Technology Enthusiast')).toBeVisible()
     expect(within(home).getByRole('link', { name: 'View Projects' })).toHaveAttribute('href', '#projects')
     expect(within(home).getByRole('link', { name: 'Contact Me' })).toHaveAttribute('href', '#contact')
     expect(within(home).getByRole('link', { name: 'GitHub' })).toHaveAttribute('href', 'https://github.com/pauljohnsuela64-prog')
@@ -40,10 +40,10 @@ describe('portfolio navigation', () => {
     expect(within(about).getByText(/fourth-year/)).toHaveTextContent('March 2027')
     expect(within(about).getByText('Antipolo City Government – PESO')).toBeVisible()
     expect(within(about).getByText('Basic Hauling & Logistic Inc. – IT Department')).toBeVisible()
-    for (const interest of ['IT support', 'Software development', 'AI', 'Automation', 'Cloud computing']) {
+    for (const interest of ['Software development', 'AI', 'AI automation', 'Cloud computing']) {
       expect(within(about).getByText(interest, { exact: true })).toBeVisible()
     }
-    expect(screen.getAllByText('Content coming soon')).toHaveLength(4)
+    expect(screen.getAllByText('Content coming soon')).toHaveLength(2)
   })
 
   it('uses the supplied profile photo with an accessible initials fallback on error', () => {

@@ -1,9 +1,10 @@
 # Personal Portfolio
 
 React + TypeScript portfolio with an AI-inspired design system, responsive
-navigation, and Phase 3 personal Hero/About Me content. Skills, Projects,
-Experience, and Contact remain placeholders. No external fonts, icon libraries,
-or animation dependencies are needed.
+navigation, personal Hero/About Me content, and Phase 4 technical skills and a
+filterable eight-project showcase. Experience and Contact remain placeholders.
+Technologies are presented as exposure through AI-assisted project development,
+not independent proficiency. No new runtime dependencies are needed.
 
 ## Requirements and setup
 
@@ -37,7 +38,7 @@ dependency versions. The production output and installed dependencies are ignore
 
 ```text
 src/
-  App.tsx            Personal Hero/About Me and four future section placeholders
+  App.tsx            Hero/About, Skills/Projects, Experience/Contact placeholders
   App.test.tsx       Rendering, anchor navigation, and mobile disclosure tests
   theme.test.tsx     Persistence, system preference, and pre-paint script tests
   main.tsx           React browser entry point
@@ -47,8 +48,13 @@ src/
     Header.tsx       Desktop navigation, mobile disclosure, and theme selector
     SectionHeading.tsx  Reusable numbered section headings
     ProfilePortrait.tsx  Profile photo with accessible initials fallback
+    Projects.tsx     Category filtering, project cards, screenshot fallbacks
+    Projects.test.tsx  Showcase counts, filtering, privacy, and skills tests
+    Skills.tsx       Six groups of accurately qualified technology exposure
   content/
     profile.ts       Personal copy, photo path, GitHub URL, and metadata source
+    projects.ts      Typed project details, categories, optional links/images
+    skills.ts        Typed skill groups and learning interests
   hooks/
     useTheme.ts      Theme selection, storage fallback, system change listener
   styles/
@@ -106,7 +112,7 @@ Replace that file to change the portrait. The browser switches to accessible PJS
 initials if the image is absent or fails to load. Width/height and CSS aspect ratio
 reserve space so this fallback does not shift the layout. The original supplied
 image is preserved. View Projects and Contact Me lead to their existing section
-placeholders; GitHub opens the supplied public profile in the current tab. No
+section and Contact placeholder respectively; GitHub opens the supplied public profile in the current tab. No
 contact details, additional social profiles, or internship responsibilities have
 been inferred.
 
@@ -117,7 +123,7 @@ been inferred.
 2. Check the portrait crop and text wrapping at 320/375px, 768px, and desktop
    widths in both themes, including 200% zoom. Confirm no horizontal overflow.
 3. Use the keyboard to activate View Projects, Contact Me, and GitHub. Confirm
-   both anchors reach their existing placeholders and GitHub reaches the supplied
+   both anchors reach their existing sections and GitHub reaches the supplied
    profile. Recheck navigation, focus rings, and persisted theme selection.
 4. Block the image request or temporarily rename the photo, then reload. Confirm
    PJS initials appear without a broken image or layout shift; restore the photo.
@@ -127,6 +133,62 @@ been inferred.
 6. Run tests, lint, and build, then use `npm run preview`. Confirm the browser tab
    title includes Paul John A. Suela and inspect the personalized meta description.
    Repeat mobile, keyboard, reduced-motion, and image fallback checks in preview.
+
+## Skills and project showcase
+
+Edit `src/content/skills.ts` for Programming, Databases, Frameworks, Development
+Tools, AI-Assisted Development, and Currently Learning. Lists describe technology
+use in inspected projects, not professional mastery or numerical skill ratings.
+AI automation and cloud computing remain learning interests. The hero, About Me,
+and generated metadata use the aspiring software developer positioning while
+preserving the supplied education and factual internship organizations.
+
+Edit `src/content/projects.ts` for all eight project cards. The typed data separates
+public and private repositories: private entries cannot define source/demo URLs.
+Do not add a public link without checking repository visibility and the actual
+destination. The two included demos (BiteMenu and Fortress Defense) returned HTTP
+200 when checked on November 19, 2026. IT Asset Management's documented hosted
+demo was unavailable and is omitted; other demo URLs were not guessed.
+
+Category filters are native toggle buttons (`aria-pressed`) in a labeled group,
+with per-category counts and a polite live result count. Focus stays on the
+selected button. All is the default and restores the full eight-card grid. No
+router, filtering library, modal, or new state dependency is needed. Categories
+use **IT Management**, not IT Support. Screenshots are lazy-loaded, retain their
+aspect ratio, and include descriptive alternatives and context captions. Missing
+or failed images show a labeled visual fallback rather than a broken image or
+invented preview. Links navigate in the same tab.
+
+Five existing screenshots are included, totaling approximately 575 KiB. Help Desk
+screenshots with unverified named records are omitted; BiteMenu and Monster
+Hatchery have no suitable available capture. PolPol AI remains private, with no
+source link; its image uses documented fictional demo content. Fortress Defense
+uses a genuine current-game browser-check capture instead of its unrelated root
+screenshot. See [project evidence](docs/project-evidence.md) for source paths,
+link checks, screenshot provenance, and project-specific limitations. No project
+is claimed to be a production deployment or independently implemented without AI.
+
+### Phase 4 acceptance checks
+
+1. Confirm the updated hero title, About Me positioning, metadata, preserved
+   internships, and all six skill groups. AI automation/cloud computing should
+   appear as learning interests, with no proficiency scores or IT Support group.
+2. Check all eight project names, descriptions, technologies, features, and
+   limitations against `docs/project-evidence.md` and the project repositories.
+3. Use Tab and Enter/Space on each category. Check pressed state, visible focus,
+   card membership, category counts, and announced result count. All should reset
+   to eight projects, with no focus jumps when filtering.
+4. Check GitHub links go to the seven public repositories. PolPol AI should have
+   no source/demo link. Check the two verified demos; no login or form submission
+   is necessary. Availability can change after verification.
+5. Check the five screenshots and captions. BiteMenu, Help Desk, and Monster
+   Hatchery should show Preview unavailable. Block an image request and confirm
+   it also falls back cleanly, without changing card identity.
+6. Check 320/375px, 768px, and desktop widths plus 200% zoom in both themes. Filter
+   buttons/tags should wrap and cards should stack without horizontal overflow.
+   Recheck navigation, theme persistence, skip link, and reduced-motion behavior.
+7. Run `npm test`, `npm run lint`, `npm run build`, then `npm run preview`. Inspect
+   the new metadata and repeat keyboard, image, privacy, and layout checks.
 
 ## Navigation and accessibility
 
