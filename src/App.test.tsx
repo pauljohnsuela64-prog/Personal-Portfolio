@@ -43,7 +43,7 @@ describe('portfolio navigation', () => {
     for (const interest of ['Software development', 'AI', 'AI automation', 'Cloud computing']) {
       expect(within(about).getByText(interest, { exact: true })).toBeVisible()
     }
-    expect(screen.getAllByText('Content coming soon')).toHaveLength(1)
+    expect(screen.queryByText('Content coming soon')).not.toBeInTheDocument()
   })
 
   it('uses the supplied profile photo with an accessible initials fallback on error', () => {
@@ -53,6 +53,27 @@ describe('portfolio navigation', () => {
     fireEvent.error(portrait)
     expect(screen.getByRole('img', { name: 'Paul John A. Suela — initials' })).toHaveTextContent('PJS')
     expect(screen.queryByRole('img', { name: 'Portrait of Paul John A. Suela' })).not.toBeInTheDocument()
+  })
+
+  it('offers only the approved GitHub contact channel and no unapproved resume link or form', () => {
+    render(<App />)
+    const contact = screen.getByRole('region', { name: 'Contact' })
+    expect(within(contact).getByText(/entry-level software development opportunities/i)).toBeVisible()
+    expect(within(contact).getAllByRole('link')).toHaveLength(1)
+    expect(within(contact).getByRole('link', { name: /GitHub/ })).toHaveAttribute('href', 'https://github.com/pauljohnsuela64-prog')
+    expect(contact.querySelector('form')).toBeNull()
+    expect(document.querySelector('a[href^="mailto:"], a[href^="tel:"], a[download]')).toBeNull()
+  })
+
+  it('provides personal footer branding, all section destinations, and AI-assisted acknowledgment', () => {
+    render(<App />)
+    const footer = screen.getByRole('contentinfo')
+    expect(within(footer).getByText('Paul John A. Suela')).toBeVisible()
+    expect(within(footer).getByText(/developed with AI assistance/i)).toBeVisible()
+    const nav = within(footer).getByRole('navigation', { name: 'Footer' })
+    for (const name of ['Home', 'About', 'Skills', 'Projects', 'Experience', 'Contact']) {
+      expect(within(nav).getByRole('link', { name })).toHaveAttribute('href', `#${name.toLowerCase()}`)
+    }
   })
 
   it('links all six desktop navigation items to labeled sections', () => {

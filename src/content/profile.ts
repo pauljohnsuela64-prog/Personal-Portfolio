@@ -5,6 +5,8 @@ export const profile = {
   initials: 'PJS',
   title: 'Aspiring Software Developer | AI & Technology Enthusiast',
   github: 'https://github.com/pauljohnsuela64-prog',
+  contactMessage: 'I am interested in entry-level software development opportunities where I can continue learning and contribute to thoughtful software.',
+  developmentAcknowledgment: 'Developed with AI assistance, with an emphasis on learning, review, and iteration.',
   photo: 'images/profile.jpg',
   introduction: 'Exploring software development and AI through AI-assisted projects, with AI automation and cloud computing as learning interests.',
   background: `I am a ${education.status.toLowerCase()} pursuing a ${education.degree} at ${education.institution}, with expected graduation in ${education.expectedGraduation.label}.`,

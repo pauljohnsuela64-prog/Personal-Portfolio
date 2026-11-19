@@ -8,8 +8,12 @@ import { Skills } from './components/Skills'
 import { Projects } from './components/Projects'
 import { Experience } from './components/Experience'
 import { ResumeDownload } from './components/Resume'
+import { Contact } from './components/Contact'
+import { Footer } from './components/Footer'
+import { useScrollReveal } from './hooks/useScrollReveal'
 
 export default function App() {
+  useScrollReveal()
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
@@ -37,7 +41,7 @@ export default function App() {
           </Container>
         </section>
         <Container>
-          <section id="about" className="portfolio-section" aria-labelledby="about-heading" tabIndex={-1}>
+          <section id="about" className="portfolio-section" data-reveal aria-labelledby="about-heading" tabIndex={-1}>
             <SectionHeading id="about-heading" number="02">About Me</SectionHeading>
             <div className="about-layout">
               <div className="about-copy">
@@ -55,17 +59,10 @@ export default function App() {
           <Skills />
           <Projects />
           <Experience />
-          <section id="contact" className="portfolio-section" aria-labelledby="contact-heading" tabIndex={-1}>
-            <SectionHeading id="contact-heading" number="06">Contact</SectionHeading>
-            <div className="section-placeholder">
-              <p>A space for future conversations and connections.</p>
-              <span className="placeholder-label">Content coming soon</span>
-            </div>
-          </section>
+          <Contact />
         </Container>
       </main>
-      <footer className="site-footer"><Container><p>Personal Portfolio <span> / AI &amp; Technology</span></p>
-        <a href="#home">Back to top <span aria-hidden="true">↑</span></a></Container></footer>
+      <Footer />
     </>
   )
 }

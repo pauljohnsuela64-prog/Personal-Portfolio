@@ -4,7 +4,7 @@ import { SectionHeading } from './SectionHeading'
 
 export function Experience() {
   return (
-    <section id="experience" className="portfolio-section" aria-labelledby="experience-heading" tabIndex={-1}>
+    <section id="experience" className="portfolio-section" data-reveal aria-labelledby="experience-heading" tabIndex={-1}>
       <SectionHeading id="experience-heading" number="05">Experience &amp; Education</SectionHeading>
       <p className="section-intro">Internship experience alongside my ongoing studies in information technology.</p>
       <div className="career-layout">

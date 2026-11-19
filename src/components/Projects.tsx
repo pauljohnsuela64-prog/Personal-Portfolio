@@ -46,7 +46,7 @@ export function Projects() {
   const visible = projects.filter((project) => category === 'All' || project.category === category)
 
   return (
-    <section id="projects" className="portfolio-section" aria-labelledby="projects-heading" tabIndex={-1}>
+    <section id="projects" className="portfolio-section" data-reveal aria-labelledby="projects-heading" tabIndex={-1}>
       <SectionHeading id="projects-heading" number="04">Projects</SectionHeading>
       <p className="section-intro">Projects developed with AI assistance while exploring software development.
         Technologies describe project use, not independent proficiency. Features and screenshots reflect inspected source and documentation.</p>
