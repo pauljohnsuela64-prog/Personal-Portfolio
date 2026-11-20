@@ -16,6 +16,7 @@ describe('portfolio navigation', () => {
   it('renders an accessible main landmark with the portfolio heading', () => {
     render(<App />)
 
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
     expect(
       within(screen.getByRole('main')).getByRole('heading', {
         level: 1,
@@ -49,7 +50,7 @@ describe('portfolio navigation', () => {
   it('uses the supplied profile photo with an accessible initials fallback on error', () => {
     render(<App />)
     const portrait = screen.getByRole('img', { name: 'Portrait of Paul John A. Suela' })
-    expect(portrait).toHaveAttribute('src', '/images/profile-480.jpg')
+    expect(portrait).toHaveAttribute('src', '/images/professional-480.jpg')
     fireEvent.error(portrait)
     expect(screen.getByRole('img', { name: 'Paul John A. Suela — initials' })).toHaveTextContent('PJS')
     expect(screen.queryByRole('img', { name: 'Portrait of Paul John A. Suela' })).not.toBeInTheDocument()

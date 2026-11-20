@@ -1,21 +1,13 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link rel="preload" as="image" href="/images/profile-480.jpg" fetchpriority="high" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0a1020" />
+    <link rel="preload" as="image" href="/images/professional-480.jpg" imagesrcset="/images/professional-480.jpg 480w, /images/professional-800.jpg 800w" imagesizes="min(20rem, calc(100vw - 4rem))" fetchpriority="high" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script id="theme-init">
-      // Apply before paint; keep preference handling aligned with useTheme.
-      (() => {
-        let saved
-        try { saved = localStorage.getItem('portfolio-theme') } catch { /* Use system preference. */ }
-        const theme = saved === 'light' || saved === 'dark'
-          ? saved
-          : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-        document.documentElement.dataset.theme = theme
-      })()
-    </script>
+
   </head>
   <body>
     <div id="root"></div>

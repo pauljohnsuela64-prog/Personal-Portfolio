@@ -14,14 +14,14 @@ test('keyboard skip link and desktop section navigation', async ({ page }) => {
   await expect(link).toHaveAttribute('aria-current', 'location')
 })
 
-test('system theme and persisted override work under production CSP', async ({ page }) => {
-  await page.emulateMedia({ colorScheme: 'dark' })
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
-  await page.getByLabel('Color theme').selectOption('light')
+test('dark palette before React under a light OS preference and strict CSP', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' })
   await page.route('**/assets/*.js', route => route.abort())
   const response = await page.reload()
-  expect(response?.headers()['content-security-policy']).toContain('sha256-')
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  expect(response?.headers()['content-security-policy']).toMatch(/script-src 'self';/)
+  await expect(page.locator('html')).toHaveCSS('color-scheme', 'dark')
+  await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(10, 16, 32)')
+  await expect(page.locator('script:not([src])')).toHaveCount(0)
 })
 
 test('project filtering updates cards and count', async ({ page }) => {
@@ -56,9 +56,10 @@ test('public contact and private project boundaries', async ({ page, request }) 
   }
 })
 
-for (const theme of ['dark', 'light']) {
-  test(`axe accessibility in ${theme} theme`, async ({ page }) => {
-    await page.getByLabel('Color theme').selectOption(theme)
+for (const width of [1280, 375]) {
+  test(`axe accessibility at ${width}px in the dark palette`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 800 })
+    if (width === 375) await page.getByRole('button', { name: /Menu/ }).click()
     const result = await new AxeBuilder({ page }).analyze()
     expect(result.violations.map(({ id, nodes }) => [id, nodes.map(n => n.target)])).toEqual([])
   })
