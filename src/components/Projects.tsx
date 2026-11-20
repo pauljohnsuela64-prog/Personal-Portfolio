@@ -34,7 +34,7 @@ function ProjectCard({ project }: { project: Project }) {
           {project.visibility === 'public' ? (
             <ButtonLink variant="secondary" href={project.repositoryUrl} aria-label={`View ${project.name} source on GitHub`}>GitHub</ButtonLink>
           ) : <span className="private-label">Private repository</span>}
-          {project.demoUrl && <ButtonLink href={project.demoUrl} aria-label={`View ${project.name} demo`}>Live demo <span aria-hidden="true">↗</span></ButtonLink>}
+          {project.demoUrl && <ButtonLink href={project.demoUrl} aria-label={`Live demo for ${project.name}`}>Live demo <span aria-hidden="true">↗</span></ButtonLink>}
         </div>
       </div>
     </article>

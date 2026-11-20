@@ -99,8 +99,7 @@ work for the current visit, but cannot survive reloads.
 
 A small synchronous script in the HTML head sets `data-theme` before the page is
 painted, so the correct palette does not wait for React. Keep that script aligned
-with `useTheme.ts`; tests exercise both paths. A deployment with a restrictive CSP
-will need a hash/nonce for this inline script (no CSP is configured locally).
+with `useTheme.ts`; tests exercise both paths. Production preview and Vercel authorize the exact bootstrap script with a SHA-256 hash.
 Theme changes are local to the tab; cross-tab synchronization is deferred.
 
 Typography uses system sans-serif and monospace stacks. Spacing and type scale
@@ -119,7 +118,7 @@ in both development and production; restart Vite after changing metadata.
 The expected graduation is recorded as March 2027, not a completed qualification.
 
 The supplied photo is `public/images/profile.jpg`, served using Vite's base URL.
-Replace that file to change the portrait. The browser switches to accessible PJS
+When replacing the original, regenerate the displayed profile-480.jpg derivative. The browser switches to accessible PJS
 initials if the image is absent or fails to load. Width/height and CSS aspect ratio
 reserve space so this fallback does not shift the layout. The original supplied
 image is preserved. View Projects and Contact Me lead to their existing section
@@ -368,10 +367,46 @@ photo-error fallback. CSS breakpoints, visual contrast,
 scroll positioning, initial paint, and real keyboard/screen-reader behavior still
 need browser acceptance testing; jsdom does not perform layout or paint.
 
+## Phase 7 verification and deployment
+
+Use Node 24 and run the same checks as GitHub Actions from the repository root.
+
+```sh
+npm ci
+npm test
+npm run lint
+npm run build
+npm run check:privacy
+npx playwright install chromium
+npm run test:e2e
+```
+
+On Linux CI, install Chromium with `--with-deps`. The push and pull request workflow has read-only repository access. It runs the browser suite against its own loopback production preview on port 4177. It uploads no artifacts. Playwright covers keyboard navigation, theme bootstrap under CSP, project counts, mobile layout, privacy boundaries and axe checks in both themes. Screen readers and other browser engines still need manual testing.
+
+For a mobile Lighthouse benchmark, start `npm run preview` and run `npx lighthouse http://localhost:4173 --chrome-flags="--headless" --only-categories=performance,accessibility,best-practices,seo --view` with Chrome installed. Results depend on the browser and host load. The hero preloads a 480px derivative of the supplied portrait. Regenerate that derivative when replacing the original.
+
+For an approved Vercel deployment, use the Vite preset, Node 24, install command `npm ci`, build command `npm run build && npm run check:privacy`, and output directory `dist`. No environment secrets are required. Use a clean Git checkout. Only the build output belongs on a static host. Once the production origin is known, absolute canonical and social-sharing URLs can be added.
+
+Vercel and Vite preview read the headers in `vercel.json`. The CSP permits same-origin resources, blocks framing and authorizes only the exact inline theme bootstrap. If its text changes, recompute its SHA-256 digest using browser-normalized LF line endings and update the policy. The Playwright reload test blocks the React bundle to verify bootstrap independently. Development mode needs Vite hot reload and uses its development policy.
+
+The production scan rejects unexpected file types, hidden files, PDF data and common contact, credential and private repository patterns. Pattern checks cannot establish the safety of arbitrary image metadata or detect every secret. Review new content and screenshots before publication. Keep the private resume outside public and Git. No private comparison values are required in CI.
+
 ## Known tooling advisory
 
-At setup on November 18, 2026, `npm audit` reported a high-severity ReDoS advisory
-for `picomatch`, inherited through development tools. The registry's latest
-release (4.0.7) is affected. Recheck with `npm audit` when updating dependencies;
-avoid forced audit downgrades of Vite or Vitest. The app does not accept glob
-patterns from users. Run `npm audit --omit=dev` to check runtime dependencies alone.
+The previously reported picomatch ReDoS advisory [GHSA-fc5q-39xc-vjpf](https://github.com/advisories/GHSA-fc5q-39xc-vjpf) was withdrawn November 18, 2026. The installed and registry-latest version was 4.0.7 at verification. Full and runtime-only npm audits reported zero vulnerabilities. No forced upgrade, override or suppression was used. Rerun `npm audit` and `npm audit --omit=dev` when updating dependencies.
+
+## Phase 7B mobile performance investigation
+
+On November 20, 2026, three sequential Lighthouse 13.6.0 CLI launches measured the same production preview on loopback with fresh headless Chromium 159 profiles. All four categories ran each time. The mobile defaults matched Phase 7: 412 × 823 CSS pixels, simulated 150 ms RTT, 1,638.4 Kbps throughput and 4× CPU slowdown. Reports, DevTools logs and raw traces were saved locally under ignored `node_modules/.tmp/perf7b-*`. No tests or builds ran alongside the benchmark series.
+
+| Measurement | Performance | Total blocking time | Largest contentful paint |
+| --- | ---: | ---: | ---: |
+| Phase 7 reference (displayed values) | 67 | 5,850 ms | 1.7 s |
+| Phase 7B run 1 | 69 | 5,191 ms | 1.646 s |
+| Phase 7B run 2 | 68 | 5,278 ms | 1.903 s |
+| Phase 7B run 3 | 71 | 2,212 ms | 1.711 s |
+| Phase 7B median | 69 | 5,191 ms | 1.711 s |
+
+All three runs scored 100 for accessibility, best practices and SEO, with zero layout shift. The reference report labeled a 5,298 ms modeled task unattributable. Its original raw trace was unavailable. Each new trace showed the same type of unattributed task. Renderer elapsed times were 1,146, 937 and 530 ms, while the corresponding renderer CPU times were just 0.211, 0.348 and 0.214 ms. The simulated durations were approximately four times those elapsed times. No nested application script execution appeared in those tasks. Compositor tasks overlapped for 1,142, 932 and 526 ms respectively, with concurrent GPU activity. Separate initial layout work took approximately 134–270 ms.
+
+The evidence points to waiting in the local browser rendering pipeline as the dominant measured stall. It does not isolate a driver, a particular visual effect or the cost on a physical phone. The production entry bundle was 243,111 bytes (about 75.5 kB gzip) and CSS was 21,446 bytes (about 5.5 kB gzip). The traces did not identify a JavaScript hot path or justify splitting the bundle. No runtime or benchmark setting was changed. The 90-point and 200 ms targets remain unmet; a hardware-backed mobile trace would be needed to assess real-device impact.

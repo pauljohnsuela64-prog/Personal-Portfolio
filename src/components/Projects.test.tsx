@@ -51,8 +51,8 @@ describe('project showcase', () => {
     expect(within(card).getByText('Private repository')).toBeVisible()
     expect(within(card).queryByRole('link')).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: /PolPol AI/ })).not.toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'View BiteMenu demo' })).toHaveAttribute('href', 'https://pauljohnsuela64-prog.github.io/BiteMenu/')
-    expect(screen.getByRole('link', { name: 'View Fortress Defense demo' })).toHaveAttribute('href', 'https://fortress-defense-phi.vercel.app')
+    expect(screen.getByRole('link', { name: 'Live demo for BiteMenu' })).toHaveAttribute('href', 'https://pauljohnsuela64-prog.github.io/BiteMenu/')
+    expect(screen.getByRole('link', { name: 'Live demo for Fortress Defense' })).toHaveAttribute('href', 'https://fortress-defense-phi.vercel.app')
     expect(screen.getAllByRole('link', { name: /source on GitHub/ })).toHaveLength(7)
   })
 
