@@ -1,5 +1,7 @@
 # Personal Portfolio
 
+[Visit the production portfolio](https://personal-portfolio-two-alpha-99.vercel.app/)
+
 React + TypeScript portfolio with an AI-inspired design system, responsive
 navigation, personal Hero/About Me content, and Phase 4 technical skills and a
 filterable eight-project showcase, an internship timeline with education, and
@@ -342,7 +344,7 @@ On Linux CI, install Chromium with `--with-deps`. The push and pull request work
 
 For a mobile Lighthouse benchmark, start `npm run preview` and run `npx lighthouse http://localhost:4173 --chrome-flags="--headless" --only-categories=performance,accessibility,best-practices,seo --view` with Chrome installed. Results depend on the browser and host load. Regenerate both responsive JPEGs when replacing the portrait.
 
-For an approved Vercel deployment, use the Vite preset, Node 24, install command `npm ci`, build command `npm run build && npm run check:privacy`, and output directory `dist`. No environment secrets are required. Use a clean Git checkout. Only the build output belongs on a static host. Once the production origin is known, absolute canonical and social-sharing URLs can be added.
+For an approved Vercel deployment, use the Vite preset, Node 24, install command `npm ci`, build command `npm run build && npm run check:privacy`, and output directory `dist`. No environment secrets are required. Use a clean Git checkout. Only the build output belongs on a static host. Canonical and social-sharing URLs are configured in vite.config.ts.
 
 Vercel and Vite preview read the headers in `vercel.json`. The CSP permits same-origin scripts and blocks inline scripts and framing. Development mode needs Vite hot reload and uses its development policy.
 
