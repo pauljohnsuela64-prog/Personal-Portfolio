@@ -1,29 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light;
-  --background: #f5f7fc;
-  --surface: #ffffff;
-  --foreground: #14213b;
-  --muted: #4c5c75;
-  --accent: #006b80;
-  --violet: #6840bc;
-  --border: #c3cede;
-  --grid: #14213b0b;
-  --glow: #00abc21a;
-  --button-bg: #006b80;
-  --button-text: #ffffff;
-  --space-section: clamp(3.5rem, 7vw, 6rem);
-  font-family: "Segoe UI", system-ui, sans-serif;
-  color: var(--foreground);
-  background: var(--background);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-:root[data-theme="dark"] {
   color-scheme: dark;
   --background: #0a1020;
   --surface: #111c31;
@@ -36,7 +13,16 @@
   --glow: #37b8e014;
   --button-bg: #63dfef;
   --button-text: #0a1020;
+  --space-section: clamp(4rem, 8vw, 7rem);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: var(--foreground);
+  background: var(--background);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
 
 @theme inline {
   --color-background: var(--background);
@@ -50,9 +36,9 @@
 html { scroll-behavior: smooth; scroll-padding-top: 7rem; }
 body { margin: 0; }
 a { color: inherit; text-decoration: none; }
-button, select, a { -webkit-tap-highlight-color: transparent; }
-button, select { font: inherit; }
-button, select, .button, nav a { cursor: pointer; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; }
+button, .button, nav a { cursor: pointer; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
 .container { width: min(100% - 3rem, 72rem); margin-inline: auto; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
@@ -64,8 +50,6 @@ button, select, .button, nav a { cursor: pointer; }
 .brand { display: inline-flex; align-items: center; gap: .7rem; min-height: 44px; font-size: .85rem; font-weight: 700; letter-spacing: .08em; }
 .brand-mark { display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid var(--accent); color: var(--accent); border-radius: .5rem .1rem; font: 1.5rem ui-monospace, monospace; }
 .brand-dot { color: var(--accent); }
-.header-controls { display: flex; align-items: center; gap: .65rem; }
-.theme-control select { min-height: 44px; max-width: 7rem; padding: .6rem .5rem; border: 1px solid var(--border); border-radius: .5rem; background: var(--surface); color: var(--foreground); }
 .desktop-navigation { display: none; }
 nav ul { list-style: none; padding: 0; margin: 0; }
 nav a { display: flex; align-items: center; min-height: 44px; color: var(--muted); font-size: .875rem; font-weight: 500; transition: color 160ms; }
@@ -174,9 +158,14 @@ h1 { margin: 0; font-size: clamp(2.5rem, 5vw, 4.25rem); font-weight: 650; letter
   .about-layout { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .hero-content { animation: hero-enter 650ms ease-out both; }
-  .hero-content:focus-within { animation: none; }
-  .portrait-orbit { animation: orbit-settle 4s ease-out both; }
+  .hero-content > :is(h1, .hero-title, .hero-actions) { animation: hero-enter 360ms ease-out backwards; }
+  .hero-content > .hero-title { animation-delay: 55ms; }
+  .hero-content > .hero-actions { animation-delay: 110ms; }
+  .hero-content:focus-within > * { animation: none; }
+  .mobile-navigation:not([hidden]) { animation: menu-enter 160ms ease-out; }
+  .project-actions a span[aria-hidden] { display: inline-block; transition: transform 160ms ease-out; }
+  .project-actions a:is(:hover, :focus-visible) span[aria-hidden] { transform: translate(2px, -2px); }
+  .portrait-orbit { animation: orbit-settle 850ms ease-out both; }
   .is-revealed { animation: section-reveal 450ms ease-out both; }
   .is-revealed:focus-within { animation: none; }
 }
@@ -191,6 +180,10 @@ h1 { margin: 0; font-size: clamp(2.5rem, 5vw, 4.25rem); font-weight: 650; letter
 @keyframes hero-enter {
   from { transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+@keyframes menu-enter {
+  from { transform: translateY(-5px); }
+  to { transform: none; }
 }
 @keyframes orbit-settle {
   from { transform: rotate(-60deg); }
@@ -232,7 +225,6 @@ h2 { margin: 0; font-size: clamp(1.75rem, 3.5vw, 2.5rem); line-height: 1.2; lett
   .header-inner { gap: .5rem; }
   .brand { gap: .35rem; font-size: .7rem; }
   .brand-mark { display: none; }
-  .header-controls { gap: .4rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { useTheme } from '../hooks/useTheme'
 import { Button } from './Button'
 import { Container } from './Container'
 import { sectionNames } from '../content/navigation'
@@ -9,7 +8,6 @@ export function Header() {
   const [open, setOpen] = useState(false)
   const header = useRef<HTMLElement>(null)
   const toggle = useRef<HTMLButtonElement>(null)
-  const { preference, changeTheme } = useTheme()
   const activeId = useActiveSection()
 
   useEffect(() => {
@@ -68,23 +66,10 @@ export function Header() {
           <span>PORTFOLIO<span className="brand-dot">.</span></span>
         </a>
         <nav className="desktop-navigation" aria-label="Primary"><ul>{links}</ul></nav>
-        <div className="header-controls">
-          <label className="theme-control">
-            <span className="sr-only">Color theme</span>
-            <select value={preference} onChange={(event) => {
-              const value = event.target.value
-              if (value === 'system' || value === 'light' || value === 'dark') changeTheme(value)
-            }}>
-              <option value="system">System</option>
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-          </label>
-          <Button variant="secondary" className="menu-toggle" ref={toggle}
-            aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen(!open)}>
-            Menu <span aria-hidden="true">{open ? '−' : '+'}</span>
-          </Button>
-        </div>
+        <Button variant="secondary" className="menu-toggle" ref={toggle}
+          aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen(!open)}>
+          Menu <span aria-hidden="true">{open ? '−' : '+'}</span>
+        </Button>
         <nav id="mobile-navigation" className="mobile-navigation" aria-label="Mobile" hidden={!open}>
           <ul>{links}</ul>
         </nav>

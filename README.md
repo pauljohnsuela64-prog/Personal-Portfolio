@@ -26,7 +26,7 @@ No environment variables or credentials are needed.
 | Command | Purpose |
 | --- | --- |
 | `npm run dev` | Start the development server with hot updates. |
-| `npm test` | Run all Vitest rendering, theme, and navigation tests once. |
+| `npm test` | Run all Vitest rendering and navigation tests once. |
 | `npm run test:watch` | Re-run tests while editing. |
 | `npm run lint` | Run ESLint; warnings also fail the check. |
 | `npm run build` | Type-check the app and tooling, then build into `dist/`. |
@@ -41,12 +41,11 @@ dependency versions. The production output and installed dependencies are ignore
 src/
   App.tsx            Complete single-page portfolio section composition
   App.test.tsx       Rendering, anchor navigation, and mobile disclosure tests
-  theme.test.tsx     Persistence, system preference, and pre-paint script tests
   main.tsx           React browser entry point
   components/
     Button.tsx       Native Button and anchor ButtonLink with shared styles
     Container.tsx    Consistent responsive content width
-    Header.tsx       Desktop navigation, mobile disclosure, and theme selector
+    Header.tsx       Desktop navigation and mobile disclosure
     SectionHeading.tsx  Reusable numbered section headings
     ProfilePortrait.tsx  Profile photo with accessible initials fallback
     Projects.tsx     Category filtering, project cards, screenshot fallbacks
@@ -65,14 +64,13 @@ src/
     career.ts        Typed internships, education, and approved-resume setting
     navigation.ts    Shared Header/Footer section names and fragment targets
   hooks/
-    useTheme.ts      Theme selection, storage fallback, system change listener
     useActiveSection.ts  Frame-throttled visible-section navigation state
     useScrollReveal.ts   Optional one-time section animation enhancement
   styles/
     index.css        Tailwind, theme tokens, responsive layout, and CSS effects
   test/
     setup.ts         DOM matchers and cleanup between tests
-index.html           HTML shell, metadata, and synchronous pre-paint theme script
+index.html           HTML shell, metadata, and dark browser color scheme
 vite.config.ts       React, Tailwind, Vitest, and HTML metadata from profile.ts
 eslint.config.js     JavaScript, TypeScript, and React lint rules
 tsconfig*.json       Strict app and build-tool TypeScript settings
@@ -91,23 +89,9 @@ color utilities map to the same variables. Reuse these tokens and the existing
 Button, ButtonLink, Container, and SectionHeading components before adding new
 variants. Buttons retain native behavior; navigation uses real anchors.
 
-The native **Color theme** selector offers System, Light, and Dark. System is the
-default and follows live OS preference changes. An explicit choice is saved as
-`portfolio-theme` in localStorage. Selecting System removes the saved override.
-Invalid values fall back to System. If storage is blocked, theme changes still
-work for the current visit, but cannot survive reloads.
+The dark palette applies before React renders and follows the same navy, cyan and violet tokens at every viewport. The browser uses dark native controls.
 
-A small synchronous script in the HTML head sets `data-theme` before the page is
-painted, so the correct palette does not wait for React. Keep that script aligned
-with `useTheme.ts`; tests exercise both paths. Production preview and Vercel authorize the exact bootstrap script with a SHA-256 hash.
-Theme changes are local to the tab; cross-tab synchronization is deferred.
-
-Typography uses system sans-serif and monospace stacks. Spacing and type scale
-with the viewport. CSS gradients and a portrait orbital accent provide the
-technology-inspired background. The hero has a 650ms entrance and the orbital
-accent settles in four seconds; neither loops. The photo stays still. Animation
-is enabled only when reduced motion is not requested. Reduced-motion preference
-also disables smooth scrolling and transitions; all content stays visible.
+The navy grid hero pairs staggered text with a circular portrait and a one-time orbital entrance. Numbered headings and project cards organize the sections. The mobile menu slides briefly into place, and live-demo arrows shift on hover or keyboard focus. Reduced motion disables these effects.
 
 ## Editing personal content
 
@@ -117,8 +101,7 @@ The Vite HTML hook generates the page title and description from this same sourc
 in both development and production; restart Vite after changing metadata.
 The expected graduation is recorded as March 2027, not a completed qualification.
 
-The supplied photo is `public/images/profile.jpg`, served using Vite's base URL.
-When replacing the original, regenerate the displayed profile-480.jpg derivative. The browser switches to accessible PJS
+The approved PNG stays in the ignored private directory. The hero and its responsive preload select between 480px and 800px JPEGs in public/images. Both preserve the original aspect ratio and omit source metadata. The browser switches to accessible PJS
 initials if the image is absent or fails to load. Width/height and CSS aspect ratio
 reserve space so this fallback does not shift the layout. The original supplied
 image is preserved. View Projects and Contact Me lead to their existing section
@@ -131,14 +114,13 @@ been inferred.
 1. Check the Hero/About copy against the supplied facts, including fourth-year
    BSIT status, Cainta Campus, March 2027 expected graduation, and both internships.
 2. Check the portrait crop and text wrapping at 320/375px, 768px, and desktop
-   widths in both themes, including 200% zoom. Confirm no horizontal overflow.
+   widths, including 200% zoom. Confirm no horizontal overflow.
 3. Use the keyboard to activate View Projects, Contact Me, and GitHub. Confirm
    both anchors reach their existing sections and GitHub reaches the supplied
-   profile. Recheck navigation, focus rings, and persisted theme selection.
+   profile. Recheck navigation, focus rings, and dark browser controls.
 4. Block the image request or temporarily rename the photo, then reload. Confirm
    PJS initials appear without a broken image or layout shift; restore the photo.
-5. Reload with normal motion: only the hero entrance and portrait orbit animate,
-   and both stop within four seconds. With reduced motion enabled, content and
+5. Reload with normal motion: the hero text enters briefly while the portrait stays still. With reduced motion enabled, content and
    the portrait should appear immediately and remain still.
 6. Run tests, lint, and build, then use `npm run preview`. Confirm the browser tab
    title includes Paul John A. Suela and inspect the personalized meta description.
@@ -158,7 +140,7 @@ proficiency claim.
 
 The responsive timeline is an ordered list; dates use semantic `time` elements,
 and decoration is CSS-only. Education and Resume have labeled sections. Existing
-anchor IDs, section numbering, theme tokens, keyboard behavior, and reduced-motion
+anchor IDs, palette tokens, keyboard behavior, and reduced-motion
 support are preserved. No new dependencies or animations are required.
 
 ### Resume privacy and availability
@@ -189,14 +171,14 @@ and production preview before publishing it. No replacement PDF was generated.
 2. Verify PESO is identified as the first internship without invented dates.
    Confirm ongoing fourth-year BSIT status and March 2027 expected graduation.
 3. Check the timeline and education/resume cards at 320/375px, tablet, desktop,
-   and 200% zoom in both themes. Text should wrap without horizontal overflow.
+   and 200% zoom. Text should wrap without horizontal overflow.
 4. Use desktop/mobile Experience navigation and keyboard controls. Check focus,
    anchor offsets, heading hierarchy, and screen-reader reading order.
 5. Confirm the Resume card has an honest unavailable message and there is no
    Hero/card download link. Confirm the private PDF is ignored, absent from public
    assets and `dist`, and blocked by the dev server. Do not publish the local copy.
 6. Recheck the unchanged professional title, project filtering, private project
-   protections, theme persistence, and reduced-motion behavior. The later Phase 6
+   protections, dark palette, and reduced-motion behavior. The later Phase 6
    Contact section uses only the approved GitHub profile.
 7. Run tests, lint, and build, then repeat layout/navigation/privacy checks using
    `npm run preview`. Automated DOM tests do not replace visual/screen-reader QA.
@@ -251,9 +233,9 @@ is claimed to be a production deployment or independently implemented without AI
 5. Check the five screenshots and captions. BiteMenu, Help Desk, and Monster
    Hatchery should show Preview unavailable. Block an image request and confirm
    it also falls back cleanly, without changing card identity.
-6. Check 320/375px, 768px, and desktop widths plus 200% zoom in both themes. Filter
+6. Check 320/375px, 768px, and desktop widths plus 200% zoom. Filter
    buttons/tags should wrap and cards should stack without horizontal overflow.
-   Recheck navigation, theme persistence, skip link, and reduced-motion behavior.
+   Recheck navigation, dark palette, skip link, and reduced-motion behavior.
 7. Run `npm test`, `npm run lint`, `npm run build`, then `npm run preview`. Inspect
    the new metadata and repeat keyboard, image, privacy, and layout checks.
 
@@ -299,15 +281,15 @@ from production, and download controls remain disabled.
 3. Scroll through all sections in both directions, use direct hashes, resize,
    and reach the page bottom. Check one desktop/mobile link has the current-location
    state, a visible underline, and no focus jump. Footer links should reach the
-   same targets without resetting project filters or theme preference.
-4. Check 320/375px, 768px, and desktop widths, plus 200% zoom in both themes.
+   same targets without resetting project filters.
+4. Check 320/375px, 768px, and desktop widths, plus 200% zoom.
    Inspect portrait cropping, card images/tags, filters, contact/footer wrapping,
    readable contrast, and absence of horizontal overflow.
 5. Check subtle hover/reveal behavior, then enable reduced motion. Content should
    stay readable and still. With IntersectionObserver disabled or throwing before
    page initialization, all sections must remain visible and usable.
 6. Recheck mobile menu Escape/dismissal/resize focus, project filters and counts,
-   photo/screenshot fallbacks, and theme persistence. No obsolete placeholder
+   photo/screenshot fallbacks, and dark palette. No obsolete placeholder
    message should remain; unavailable screenshots/resume retain honest fallbacks.
 7. Run tests, lint, build, and `npm run preview`. Recheck private PDF exclusion,
    disabled downloads, and development HTTP denial of private paths. Repeat visual,
@@ -336,36 +318,11 @@ and touch use. Decorative geometry is hidden from assistive technologies.
 
 ## Manual checks
 
-1. Run `npm run dev`. Check desktop (1024/1440px), tablet (768px), and mobile
-   (320/375px) widths in both themes. Check readability, wrapping, no horizontal
-   overflow, and 200% zoom. The header should switch navigation at 64rem.
-2. With no saved theme, choose System and change the OS color preference. The
-   page should follow. Choose the opposite explicit theme and reload: it should
-   persist without briefly showing the system palette. Repeat with network/CPU
-   throttling. Switch back to System and confirm the saved override is removed.
-3. Tab from the address bar: Skip to content should appear first. Use only the
-   keyboard for theme selection and all navigation; focus should remain visible.
-4. At mobile width, open Menu with Enter/Space and Tab through all six links.
-   Escape should close it and restore focus to Menu. Reopen and select a section:
-   the menu should close, the URL hash should update, and the section should be
-   visible and focused below the header. Check outside click and Tab dismissal.
-5. Open the mobile menu, resize to desktop, then back to mobile: it should be
-   closed. Verify desktop links, hero buttons, Back to top, browser back/forward,
-   and direct URLs such as `/#projects`.
-6. Enable reduced motion: anchor jumps should be immediate and control
-   transitions disabled. Check a screen reader announces the selector, menu
-   expansion state, navigation landmarks, and section headings.
-7. With localStorage blocked, change themes and navigate: no crash should occur.
-   Persistence is unavailable in this case. Check the browser console for errors.
-8. Run `npm test`, `npm run lint`, `npm run build`, then `npm run preview` and
-   repeat the theme reload and navigation checks against the production build.
-
-Vitest exercises the real components in jsdom, including bootstrap script
-execution, theme reload behavior, invalid/blocked storage, system changes,
-anchor targets, menu focus/dismissal, supplied personal content, hero links, and
-photo-error fallback. CSS breakpoints, visual contrast,
-scroll positioning, initial paint, and real keyboard/screen-reader behavior still
-need browser acceptance testing; jsdom does not perform layout or paint.
+1. Reload with a light OS preference. Confirm the page and native controls are dark before interaction.
+2. Use the skip link, desktop anchors and mobile Menu with the keyboard. Escape returns focus to Menu.
+3. Verify the title and actions settle once, the portrait stays still and project cards respond to focus or hover.
+4. Enable reduced motion and reload. Content should remain visible with immediate anchor navigation.
+5. Check filters, public links, portrait fallback and text wrapping at 320px and 200% zoom.
 
 ## Phase 7 verification and deployment
 
@@ -381,13 +338,13 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-On Linux CI, install Chromium with `--with-deps`. The push and pull request workflow has read-only repository access. It runs the browser suite against its own loopback production preview on port 4177. It uploads no artifacts. Playwright covers keyboard navigation, theme bootstrap under CSP, project counts, mobile layout, privacy boundaries and axe checks in both themes. Screen readers and other browser engines still need manual testing.
+On Linux CI, install Chromium with `--with-deps`. The push and pull request workflow has read-only repository access. It runs the browser suite against its own loopback production preview on port 4177. It uploads no artifacts. Playwright covers keyboard navigation, dark rendering before React under CSP, project counts, mobile layout, privacy boundaries and axe checks at desktop and mobile widths. Screen readers and other browser engines still need manual testing.
 
-For a mobile Lighthouse benchmark, start `npm run preview` and run `npx lighthouse http://localhost:4173 --chrome-flags="--headless" --only-categories=performance,accessibility,best-practices,seo --view` with Chrome installed. Results depend on the browser and host load. The hero preloads a 480px derivative of the supplied portrait. Regenerate that derivative when replacing the original.
+For a mobile Lighthouse benchmark, start `npm run preview` and run `npx lighthouse http://localhost:4173 --chrome-flags="--headless" --only-categories=performance,accessibility,best-practices,seo --view` with Chrome installed. Results depend on the browser and host load. Regenerate both responsive JPEGs when replacing the portrait.
 
 For an approved Vercel deployment, use the Vite preset, Node 24, install command `npm ci`, build command `npm run build && npm run check:privacy`, and output directory `dist`. No environment secrets are required. Use a clean Git checkout. Only the build output belongs on a static host. Once the production origin is known, absolute canonical and social-sharing URLs can be added.
 
-Vercel and Vite preview read the headers in `vercel.json`. The CSP permits same-origin resources, blocks framing and authorizes only the exact inline theme bootstrap. If its text changes, recompute its SHA-256 digest using browser-normalized LF line endings and update the policy. The Playwright reload test blocks the React bundle to verify bootstrap independently. Development mode needs Vite hot reload and uses its development policy.
+Vercel and Vite preview read the headers in `vercel.json`. The CSP permits same-origin scripts and blocks inline scripts and framing. Development mode needs Vite hot reload and uses its development policy.
 
 The production scan rejects unexpected file types, hidden files, PDF data and common contact, credential and private repository patterns. Pattern checks cannot establish the safety of arbitrary image metadata or detect every secret. Review new content and screenshots before publication. Keep the private resume outside public and Git. No private comparison values are required in CI.
 
@@ -410,3 +367,15 @@ On November 20, 2026, three sequential Lighthouse 13.6.0 CLI launches measured t
 All three runs scored 100 for accessibility, best practices and SEO, with zero layout shift. The reference report labeled a 5,298 ms modeled task unattributable. Its original raw trace was unavailable. Each new trace showed the same type of unattributed task. Renderer elapsed times were 1,146, 937 and 530 ms, while the corresponding renderer CPU times were just 0.211, 0.348 and 0.214 ms. The simulated durations were approximately four times those elapsed times. No nested application script execution appeared in those tasks. Compositor tasks overlapped for 1,142, 932 and 526 ms respectively, with concurrent GPU activity. Separate initial layout work took approximately 134–270 ms.
 
 The evidence points to waiting in the local browser rendering pipeline as the dominant measured stall. It does not isolate a driver, a particular visual effect or the cost on a physical phone. The production entry bundle was 243,111 bytes (about 75.5 kB gzip) and CSS was 21,446 bytes (about 5.5 kB gzip). The traces did not identify a JavaScript hot path or justify splitting the bundle. No runtime or benchmark setting was changed. The 90-point and 200 ms targets remain unmet; a hardware-backed mobile trace would be needed to assess real-device impact.
+
+## Phase 7C dark-only preview before the minimal redesign
+
+Three Lighthouse 13.6.0 mobile runs measured the final responsive portrait on production preview with the Phase 7B settings.
+
+| Run | Performance | TBT | LCP |
+| --- | ---: | ---: | ---: |
+| 1 | 69 | 3,508 ms | 2.127 s |
+| 2 | 69 | 2,984 ms | 2.112 s |
+| 3 | 71 | 1,949 ms | 2.109 s |
+
+Median performance was 69, TBT 2,984 ms and LCP 2.112 s. Phase 7B measured 69, 5,191 ms and 1.711 s respectively. Local headless results vary and physical-device performance remains unverified.
