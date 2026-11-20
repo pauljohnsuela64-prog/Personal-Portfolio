@@ -13,7 +13,7 @@ export function Contact() {
           <p>{profile.contactMessage}</p>
           <p className="contact-note">Explore my projects and development journey on GitHub.</p>
         </div>
-        <ButtonLink href={profile.github} aria-label={`Visit ${profile.name} on GitHub`}>Visit GitHub <span aria-hidden="true">↗</span></ButtonLink>
+        <ButtonLink href={profile.github}>Visit GitHub <span aria-hidden="true">↗</span></ButtonLink>
       </div>
     </section>
   )

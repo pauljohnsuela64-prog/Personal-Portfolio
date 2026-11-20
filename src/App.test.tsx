@@ -49,7 +49,7 @@ describe('portfolio navigation', () => {
   it('uses the supplied profile photo with an accessible initials fallback on error', () => {
     render(<App />)
     const portrait = screen.getByRole('img', { name: 'Portrait of Paul John A. Suela' })
-    expect(portrait).toHaveAttribute('src', '/images/profile.jpg')
+    expect(portrait).toHaveAttribute('src', '/images/profile-480.jpg')
     fireEvent.error(portrait)
     expect(screen.getByRole('img', { name: 'Paul John A. Suela — initials' })).toHaveTextContent('PJS')
     expect(screen.queryByRole('img', { name: 'Portrait of Paul John A. Suela' })).not.toBeInTheDocument()
